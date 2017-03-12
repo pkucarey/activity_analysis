@@ -7,7 +7,8 @@ import codecs   #codecs提供的open方法来指定打开的文件的语言编�
 import pandas   #数据分析包
 import matplotlib.pyplot as plt 
 from wordcloud import WordCloud#词云包
-from optparse import OptionParser  
+from optparse import OptionParser 
+from scipy.misc import imread
 
 USAGE = "usage:    python activity_analysis.py -i [input directory name] -o [output directory name] -k [top k]"  
 total_segment=[]
@@ -24,7 +25,8 @@ def words_stat(segment):
     return words_stat
 
 def plot_stat(outputDir, words_stat, file_name, topK=100):
-    wordcloud=WordCloud(font_path="simhei.ttf",background_color="white")
+    mask_img = imread('./mask.jpg', flatten=True)
+    wordcloud=WordCloud(font_path="simhei.ttf", background_color="white", mask=mask_img)
     wordcloud=wordcloud.fit_words(words_stat.head(topK).itertuples(index=False))
     plt.imshow(wordcloud)
     plt.savefig(outputDir + '/' + file_name.split("/")[-1].split(".")[0] + '.png', dpi=400)
